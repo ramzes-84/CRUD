@@ -13,12 +13,13 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "dotenv": "^16.4.1",
     "uuid": "^9.0.1"
   },
   "scripts": {
     "start:dev": "npx nodemon",
-    "build": "tsc",
     "start": "tsc && node dist/index.js",
+    "build": "tsc",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix"
   }
