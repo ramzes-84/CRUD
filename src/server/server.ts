@@ -11,13 +11,13 @@ const server = createServer((req, res) => {
   const rarsedDataFromUrl = parseUrl(req);
   if (!rarsedDataFromUrl) throw new Error("URL did not parsed");
 
-  const { query, path, method } = rarsedDataFromUrl;
+  const { path, method } = rarsedDataFromUrl;
 
   if (Object.values(Endpoints).includes(path as Endpoints)) {
     const endpointHandlersObj = endpoints[path as keyof typeof endpoints];
     if (Object.hasOwn(endpointHandlersObj, method)) {
       const handler = endpointHandlersObj[method];
-      handler(res);
+      handler(res, req);
     } else
       sendResponse(res, 404, CONTENT_JSON, {
         error: "Non-consuming method",
