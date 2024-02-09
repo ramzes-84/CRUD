@@ -22,7 +22,11 @@ export const endpoints = {
       req.on("end", () => {
         const newUserData = JSON.parse(requestBody);
         if (checkUserData(newUserData)) {
-          dataBase.push({ id: v4(), ...newUserData });
+          dataBase.push({
+            id: v4(),
+            ...newUserData,
+            age: +(newUserData as User).age,
+          });
           sendResponse(res, 201, CONTENT_JSON, {
             data: dataBase.at(-1) as User,
           });
