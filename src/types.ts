@@ -7,3 +7,5 @@ export interface UserData {
   age: number;
   hobbies: string[];
 }
+
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
