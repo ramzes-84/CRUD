@@ -1,13 +1,15 @@
 import { ServerResponse } from "http";
 import { sendResponse } from "../utils/sendRes";
+import { dataBase } from "../dataBase";
+import { Endpoints } from "../types";
 
-const CONTENT_JSON = { "Content-Type": "application/json" };
+export const CONTENT_JSON = { "Content-Type": "application/json" };
 
 export const endpoints = {
-  "/api/users": {
+  [Endpoints.users]: {
     GET(res: ServerResponse) {
-      sendResponse(res, 404, CONTENT_JSON, {
-        error: "Non-consuming method",
+      sendResponse(res, 200, CONTENT_JSON, {
+        data: dataBase,
       });
     },
     POST: (res: ServerResponse) => {
