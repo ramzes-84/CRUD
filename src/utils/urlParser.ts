@@ -1,15 +1,14 @@
 import { IncomingMessage } from "http";
 import { parse } from "url";
-import { HttpMethod } from "../types";
+import { AllowedMethods } from "../types";
 
 export const parseUrl = (req: IncomingMessage) => {
   if (req.url && req.method) {
-    const method = req.method.toUpperCase() as HttpMethod;
+    const method = req.method.toUpperCase() as AllowedMethods;
     let ID: string | undefined;
     const parsedUrl = parse(req.url, true);
     if (parsedUrl.pathname && parsedUrl.pathname.startsWith("/api/users")) {
       const segmentsArr = parsedUrl.pathname.split("/").slice(1);
-      console.log(segmentsArr);
       if (
         parsedUrl.pathname === "/api/users" ||
         parsedUrl.pathname === "/api/users/"
@@ -24,4 +23,10 @@ export const parseUrl = (req: IncomingMessage) => {
     }
   }
   return null;
+};
+
+export const methodChecker = (req: IncomingMessage) => {
+  if (req.method) {
+    return Object.keys(AllowedMethods).includes(req.method);
+  }
 };

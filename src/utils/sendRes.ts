@@ -17,7 +17,7 @@ export const wrongEndpointRes = sendResponse.bind(null, 404, CONTENT_JSON, {
 });
 
 export const wrongMethodRes = sendResponse.bind(null, 404, CONTENT_JSON, {
-  error: "Non-consuming method.",
+  error: "The endpoint does not support this method.",
 });
 
 export const wrongUserFieldsRes = sendResponse.bind(null, 400, CONTENT_JSON, {
