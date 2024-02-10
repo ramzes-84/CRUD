@@ -35,3 +35,6 @@ export const userNotFoundRes = sendResponse.bind(null, 404, CONTENT_JSON, {
 export const userDeletedRes = sendResponse.bind(null, 204, CONTENT_JSON, {
   error: "User's record deleted successfully.",
 });
+export const serverErrorRes = sendResponse.bind(null, 500, CONTENT_JSON, {
+  error: "Internal server error.",
+});
