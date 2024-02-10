@@ -4,11 +4,20 @@ import { HttpMethod } from "../types";
 
 export const parseUrl = (req: IncomingMessage) => {
   if (req.url && req.method) {
-    const parsedUrl = parse(req.url, true);
-    const query = parsedUrl.query;
-    const path = parsedUrl.pathname ?? "";
     const method = req.method.toUpperCase() as HttpMethod;
-    return { query, path, method };
+    let ID: string | undefined;
+    const parsedUrl = parse(req.url, true);
+    if (parsedUrl.pathname && parsedUrl.pathname.startsWith("/api/users")) {
+      const segmentsArr = parsedUrl.pathname.split("/").slice(1);
+      if (segmentsArr.length === 2) {
+        const path = segmentsArr.join("/");
+        return { path, method, ID };
+      } else if (segmentsArr.length === 3) {
+        const path = segmentsArr.slice(0, 2).join("/");
+        ID = segmentsArr.at(-1);
+        return { path, method, ID };
+      }
+    }
   }
   return null;
 };

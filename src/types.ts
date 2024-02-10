@@ -15,7 +15,8 @@ export interface UserResponse {
   data: User[] | User;
 }
 export enum Endpoints {
-  users = "/api/users",
+  users = "api/users",
+  user = "api/users/",
 }
 // export interface HandlersObj {
 //   GET: (res: ServerResponse) => void;
