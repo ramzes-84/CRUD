@@ -1,12 +1,25 @@
 import { ServerResponse, IncomingMessage } from "http";
 import { ResponsePayLoad } from "../types";
+import { CONTENT_JSON } from "../server/endpoints";
 
 export const sendResponse = (
-  res: ServerResponse<IncomingMessage>,
   statusCode: number,
   contentType: { "Content-Type": string },
   data: ResponsePayLoad,
+  res: ServerResponse<IncomingMessage>,
 ) => {
   res.writeHead(statusCode, contentType);
   res.end(JSON.stringify(data));
 };
+
+export const wrongEndpointRes = sendResponse.bind(null, 404, CONTENT_JSON, {
+  error: "Wrong endpoint",
+});
+
+export const wrongMethodRes = sendResponse.bind(null, 404, CONTENT_JSON, {
+  error: "Non-consuming method",
+});
+
+export const wrongUserFieldsRes = sendResponse.bind(null, 400, CONTENT_JSON, {
+  error: "Required fields was not provided or there are wrong data types",
+});

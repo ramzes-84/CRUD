@@ -1,31 +1,25 @@
 import "dotenv/config";
 import { createServer } from "http";
-import { CONTENT_JSON, endpoints } from "./endpoints";
+import { endpoints } from "./endpoints";
 import { parseUrl } from "../utils/urlParser";
-import { sendResponse } from "../utils/sendRes";
+import { wrongEndpointRes, wrongMethodRes } from "../utils/sendRes";
 import { Endpoints } from "../types";
 
 const PORT = process.env.PORT;
 
 const server = createServer((req, res) => {
-  const rarsedDataFromUrl = parseUrl(req);
-  if (!rarsedDataFromUrl) throw new Error("URL did not parsed");
+  const parsedDataFromUrl = parseUrl(req);
+  if (!parsedDataFromUrl) throw new Error("URL did not parsed");
 
-  const { path, method } = rarsedDataFromUrl;
+  const { path, method } = parsedDataFromUrl;
 
   if (Object.values(Endpoints).includes(path as Endpoints)) {
     const endpointHandlersObj = endpoints[path as keyof typeof endpoints];
     if (Object.hasOwn(endpointHandlersObj, method)) {
       const handler = endpointHandlersObj[method];
       handler(res, req);
-    } else
-      sendResponse(res, 404, CONTENT_JSON, {
-        error: "Non-consuming method",
-      });
-  } else
-    sendResponse(res, 404, CONTENT_JSON, {
-      error: "Wrong endpoint",
-    });
+    } else wrongMethodRes(res);
+  } else wrongEndpointRes(res);
 });
 
 server.listen(PORT, () =>

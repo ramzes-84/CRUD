@@ -1,5 +1,3 @@
-// import { ServerResponse } from "http";
-
 export interface User extends UserData {
   id: string;
 }

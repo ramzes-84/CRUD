@@ -1,5 +1,9 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { sendResponse } from "../utils/sendRes";
+import {
+  sendResponse,
+  wrongMethodRes,
+  wrongUserFieldsRes,
+} from "../utils/sendRes";
 import { dataBase } from "../dataBase";
 import { Endpoints, User } from "../types";
 import { v4 } from "uuid";
@@ -10,9 +14,14 @@ export const CONTENT_JSON = { "Content-Type": "application/json" };
 export const endpoints = {
   [Endpoints.users]: {
     GET(res: ServerResponse) {
-      sendResponse(res, 200, CONTENT_JSON, {
-        data: dataBase,
-      });
+      sendResponse(
+        200,
+        CONTENT_JSON,
+        {
+          data: dataBase,
+        },
+        res,
+      );
     },
     POST: (res: ServerResponse, req: IncomingMessage) => {
       let requestBody = "";
@@ -27,25 +36,22 @@ export const endpoints = {
             ...newUserData,
             age: +(newUserData as User).age,
           });
-          sendResponse(res, 201, CONTENT_JSON, {
-            data: dataBase.at(-1) as User,
-          });
-        } else
-          sendResponse(res, 400, CONTENT_JSON, {
-            error:
-              "Required fields was not provided or there are wrong data types",
-          });
+          sendResponse(
+            201,
+            CONTENT_JSON,
+            {
+              data: dataBase.at(-1) as User,
+            },
+            res,
+          );
+        } else wrongUserFieldsRes(res);
       });
     },
     PUT: (res: ServerResponse) => {
-      sendResponse(res, 404, CONTENT_JSON, {
-        error: "Non-consuming method",
-      });
+      wrongMethodRes(res);
     },
     DELETE: (res: ServerResponse) => {
-      sendResponse(res, 404, CONTENT_JSON, {
-        error: "Non-consuming method",
-      });
+      wrongMethodRes(res);
     },
   },
 };
