@@ -9,7 +9,11 @@ export const parseUrl = (req: IncomingMessage) => {
     const parsedUrl = parse(req.url, true);
     if (parsedUrl.pathname && parsedUrl.pathname.startsWith("/api/users")) {
       const segmentsArr = parsedUrl.pathname.split("/").slice(1);
-      if (segmentsArr.length === 2) {
+      console.log(segmentsArr);
+      if (
+        parsedUrl.pathname === "/api/users" ||
+        parsedUrl.pathname === "/api/users/"
+      ) {
         const path = segmentsArr.join("/");
         return { path, method, ID };
       } else if (segmentsArr.length === 3) {
