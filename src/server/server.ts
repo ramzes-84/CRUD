@@ -11,7 +11,7 @@ import { Endpoints } from "../types";
 
 const PORT = process.env.PORT;
 
-const server = createServer((req, res) => {
+export const server = createServer((req, res) => {
   const parsedDataFromUrl = parseUrl(req);
   try {
     if (!parsedDataFromUrl) wrongEndpointRes(res);
