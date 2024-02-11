@@ -38,3 +38,7 @@ export const userDeletedRes = sendResponse.bind(null, 204, CONTENT_JSON, {
 export const serverErrorRes = sendResponse.bind(null, 500, CONTENT_JSON, {
   error: "Internal server error.",
 });
+
+export const wrongJSONRes = sendResponse.bind(null, 400, CONTENT_JSON, {
+  error: "It seems that JSON is incorrect.",
+});

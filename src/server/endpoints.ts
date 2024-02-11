@@ -3,6 +3,7 @@ import {
   sendResponse,
   userDeletedRes,
   userNotFoundRes,
+  wrongJSONRes,
   wrongMethodRes,
   wrongUserFieldsRes,
   wrongUuidRes,
@@ -10,7 +11,7 @@ import {
 import { dataBase } from "../dataBase";
 import { Endpoints, User } from "../types";
 import { v4, validate } from "uuid";
-import { checkUserData, isAUserData } from "../utils/userDataChecker";
+import { isAUserData, isUserDataOnUpdate } from "../utils/userDataChecker";
 
 export const CONTENT_JSON = { "Content-Type": "application/json" };
 
@@ -47,18 +48,22 @@ export const endpoints = {
             requestBody += chunk;
           });
           req.on("end", () => {
-            const newUserData = JSON.parse(requestBody);
-            if (checkUserData(newUserData)) {
-              Object.assign(user, newUserData);
-              sendResponse(
-                201,
-                CONTENT_JSON,
-                {
-                  data: user,
-                },
-                res,
-              );
-            } else wrongUserFieldsRes(res);
+            try {
+              const newUserData = JSON.parse(requestBody);
+              if (isUserDataOnUpdate(newUserData)) {
+                Object.assign(user, newUserData);
+                sendResponse(
+                  201,
+                  CONTENT_JSON,
+                  {
+                    data: user,
+                  },
+                  res,
+                );
+              } else wrongUserFieldsRes(res);
+            } catch {
+              wrongJSONRes(res);
+            }
           });
         } else userNotFoundRes(res);
       }
@@ -94,21 +99,25 @@ export const endpoints = {
         requestBody += chunk;
       });
       req.on("end", () => {
-        const newUserData = JSON.parse(requestBody);
-        if (isAUserData(newUserData)) {
-          dataBase.push({
-            id: v4(),
-            ...newUserData,
-          });
-          sendResponse(
-            201,
-            CONTENT_JSON,
-            {
-              data: dataBase.at(-1) as User,
-            },
-            res,
-          );
-        } else wrongUserFieldsRes(res);
+        try {
+          const newUserData = JSON.parse(requestBody);
+          if (isAUserData(newUserData)) {
+            dataBase.push({
+              id: v4(),
+              ...newUserData,
+            });
+            sendResponse(
+              201,
+              CONTENT_JSON,
+              {
+                data: dataBase.at(-1) as User,
+              },
+              res,
+            );
+          } else wrongUserFieldsRes(res);
+        } catch {
+          wrongJSONRes(res);
+        }
       });
     },
     PUT: (res: ServerResponse) => {
