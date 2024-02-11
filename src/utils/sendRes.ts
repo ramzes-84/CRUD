@@ -25,7 +25,7 @@ export const wrongUserFieldsRes = sendResponse.bind(null, 400, CONTENT_JSON, {
 });
 
 export const wrongUuidRes = sendResponse.bind(null, 400, CONTENT_JSON, {
-  error: "Provided identeficator is not a correct UUID.",
+  error: "Provided identificator is not a correct UUID.",
 });
 
 export const userNotFoundRes = sendResponse.bind(null, 404, CONTENT_JSON, {

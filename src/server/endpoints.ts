@@ -10,7 +10,7 @@ import {
 import { dataBase } from "../dataBase";
 import { Endpoints, User } from "../types";
 import { v4, validate } from "uuid";
-import { checkUserData } from "../utils/userDataChecker";
+import { checkUserData, isAUserData } from "../utils/userDataChecker";
 
 export const CONTENT_JSON = { "Content-Type": "application/json" };
 
@@ -95,11 +95,10 @@ export const endpoints = {
       });
       req.on("end", () => {
         const newUserData = JSON.parse(requestBody);
-        if (checkUserData(newUserData)) {
+        if (isAUserData(newUserData)) {
           dataBase.push({
             id: v4(),
             ...newUserData,
-            age: +(newUserData as User).age,
           });
           sendResponse(
             201,
